@@ -1,3 +1,4 @@
+import random
 import numpy as np
 from Object import Object
 
@@ -5,13 +6,24 @@ from Object import Object
 class Room:
     def __init__(self, shape):
         self.shape = shape
+        self.objects = None
+        self.state = None
 
-    def create_objects(self):
-        return [
-            Object(0, "TV", (290, 40), "black", (290, 40)),
-            Object(1, "Canapé", (270, 90), "blue", (270, 90)),
-            Object(2, "Fauteuil1", (95, 75), "red", (115, 90)),
-            Object(3, "Fauteuil2", (95, 75), "red", (115, 90)),
-            Object(4, "Table", (115, 90), "yellow", (120, 95)),
-            Object(5, "Plante", (105, 100), "green", (135, 120)),
-        ]
+    def add_objects(self, objects):
+        for obj in objects:
+            # (0,0) is the center of the room
+            obj.position = np.array(
+                [
+                    random.randint(
+                        (-self.shape[0] // 2 + obj.shape[0] // 2),
+                        (self.shape[0] // 2 - obj.shape[0] // 2),
+                    ),
+                    random.randint(
+                        (-self.shape[1] // 2 + obj.shape[1] // 2),
+                        (self.shape[1] // 2 - obj.shape[1] // 2),
+                    ),
+                ]
+            )
+            obj.orientation = np.random.randint(-1, 1)
+        self.objects = objects
+        self.state = [obj.position for obj in objects]
